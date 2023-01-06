@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
+import logo from "./logo.svg";
 
-import "./App.css";
 import { getFirestore, addDoc, collection, doc } from "firebase/firestore";
 
 import {
@@ -12,8 +12,8 @@ import {
 } from "firebase/storage";
 import { ToastContainer, toast } from "react-toastify";
 
-import app from "./utils/firebaseConfig";
-function App() {
+import app from "../utils/firebaseConfig";
+function Admin() {
   const db = getFirestore(app);
   const storage = getStorage(app);
   const storageRef = ref(storage, `imagens/${Date.now()}`);
@@ -180,6 +180,7 @@ function App() {
                           Ficção científica
                         </option>
                         <option value={"acao"}>Ação</option>
+                        <option value={"drama"}>Drama</option>
                         <option value={"aventura"}>Aventura</option>
                         <option value={"infantil"}>Infantil</option>
                         <option value={"romance"}>Romance</option>
@@ -223,4 +224,4 @@ function App() {
   );
 }
 
-export default App;
+export default Admin;

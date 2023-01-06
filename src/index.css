@@ -1,13 +1,51 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.cursor-pointer {
+  cursor: pointer;
 }
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.form-book {
+  width: 850px;
+  margin: 0 auto;
+}
+.container-fluid {
+  background-color: #51a3a3;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+.font-weight-bolder {
+  font-weight: bolder !important;
+}
+h1,
+h2 {
+  color: var(--my-green);
+}
+.pdp-container-descricao {
+  color: var(--my-purple);
+}
+.pdp-ctn-step-add-to-cart {
+  column-gap: 20px;
+}
+.bg-purple {
+  background-color: var(--my-purple) !important;
+}
+.slick-slider.slick-initialized {
+  width: 100%;
+}
+.slick-arrow.slick-prev {
+  left: -34px;
+}
+.slick-arrow.slick-next {
+  right: -10px;
+}
+.slick-prev:before,
+.slick-next::before {
+  color: var(--my-purple);
+  font-size: 30px;
+}
+@media (max-width: 416px) {
+  .row.switch-mobile {
+    flex-direction: column-reverse !important;
+  }
+  .btn-ver-produto {
+    font-size: 14px !important;
+  }
 }

@@ -1,0 +1,65 @@
+:root {
+  --my-green: #51a3a3;
+  --my-dark-green: #2e86ab;
+  --my-purple: #3b3561;
+  --my-yellow: #f7e733;
+}
+nav {
+  background-color: var(--my-purple);
+}
+nav a {
+  color: var(--my-yellow) !important;
+}
+.shelf-container {
+  width: 260px;
+}
+.shelf-container-img img {
+  height: 340px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.shelf-container-img {
+  padding: 10px;
+  background-color: #f7e733;
+
+  width: 100%;
+}
+h1.conheca-nossos-livros {
+  color: var(--my-purple);
+}
+.btn-ver-produto {
+  background-color: var(--my-purple);
+  transition: 0.2s all;
+}
+.btn-ver-produto:hover {
+  background-color: var(--my-dark-green);
+  color: var(--my-green);
+}
+.btn-busca-outline {
+  border: 1px solid var(--my-green);
+  color: var(--my-green) !important;
+  background-color: transparent;
+}
+.ctn-preco,
+.ctn-nome {
+  text-transform: capitalize;
+  color: var(--my-purple);
+}
+.ctn-nome {
+  min-height: 50px;
+}
+
+@media (max-width: 1024px) {
+  .shelf-container {
+    width: 220px;
+  }
+}
+@media (max-width: 416px) {
+  .shelf-container {
+    width: 100%;
+  }
+  .shelf-container-img img {
+    height: 450px;
+  }
+}

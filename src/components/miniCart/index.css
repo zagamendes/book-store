@@ -1,0 +1,33 @@
+.minicart-preco {
+  min-width: 100px;
+  margin: 0;
+  color: var(--my-purple);
+}
+.offcanvas {
+  width: 500px !important;
+  transition: all 0.3s;
+}
+.offcanvas-body {
+}
+.minicart-btn-remover {
+  background-color: transparent;
+  color: var(--my-purple);
+}
+.minicart-nome-do-produto {
+  max-width: 300px;
+  color: var(--my-purple);
+}
+.minicart-ctn-items {
+  min-height: 560px;
+  max-height: 560px;
+  overflow: auto;
+}
+.minicart-ctn-items::-webkit-scrollbar {
+  border-radius: 10px;
+  background-color: var(--my-green);
+  width: 10px;
+}
+.minicart-ctn-items::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: var(--my-purple);
+}

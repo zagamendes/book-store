@@ -4,7 +4,7 @@ import ReactDOM from "react-dom/client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.min.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Admin from "./screens/Admin";
+import Admin from "./screens/FormularioCadastroProduto";
 import Home from "./screens/Home";
 import Header from "./components/header/Header";
 import PDP from "./screens/Pdp";
@@ -22,6 +22,8 @@ import LoginProvider from "./contextos/LoginContext";
 import OrderPlaced from "./screens/OrderPlaced";
 import AuthProvider from "./contextos/AuthContext";
 import Cart from "./screens/Cart";
+import SideBarAdmin from "./components/SideBarAdmin/SideBarAdmin";
+import FormularioCadastroProduto from "./screens/FormularioCadastroProduto";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -31,12 +33,17 @@ root.render(
     <MiniCartProvider>
       <LoginProvider>
         <Router>
-          <Header />
-          <User />
-          <MiniCart />
-
           <Routes>
-            <Route path="/admin" element={<Admin />} />
+            <Route path="/admin" element={<SideBarAdmin />}>
+              <Route path="produto" element={<FormularioCadastroProduto />}>
+                <Route path=":id" element={<FormularioCadastroProduto />} />
+              </Route>
+            </Route>
+          </Routes>
+          {/* <Header />
+          <User />
+          <MiniCart /> */}
+          <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/:categoria" element={<Categoria />} />
             <Route path="/flex" element={<Flex />} />
@@ -46,7 +53,7 @@ root.render(
             <Route path="/checkout/cart" element={<Cart />} />
           </Routes>
         </Router>
-        <Footer />
+        {/* <Footer /> */}
       </LoginProvider>
     </MiniCartProvider>
   </AuthProvider>

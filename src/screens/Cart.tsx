@@ -114,7 +114,7 @@ const Cart: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {products.map((product) => (
+                {products?.map((product) => (
                   <tr key={product.id}>
                     <td>
                       <img
@@ -155,7 +155,7 @@ const Cart: React.FC = () => {
             {showAddresses && shippingOptions.length == 0 ? (
               <div>
                 <strong>Endereços</strong>
-                {(user?.enderecos as Array<enderecoDeEntrega>).map(
+                {(user?.enderecos as Array<enderecoDeEntrega>)?.map(
                   (endereco) => {
                     return (
                       <UserAddresses

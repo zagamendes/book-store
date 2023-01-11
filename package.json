@@ -21,6 +21,7 @@
     "react-bootstrap": "^2.7.0",
     "react-dom": "^18.2.0",
     "react-firebaseui": "^6.0.0",
+    "react-input-mask": "^2.0.4",
     "react-loading-skeleton": "^3.1.0",
     "react-notifications": "^1.7.4",
     "react-router-dom": "^6.5.0",
@@ -29,6 +30,7 @@
     "react-slick": "^0.29.0",
     "react-toastify": "^9.1.1",
     "slick-carousel": "^1.8.1",
+    "slugify": "^1.6.5",
     "stars-rating": "^1.1.0",
     "typescript": "^4.9.4",
     "web-vitals": "^2.1.4"
@@ -58,6 +60,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-input-mask": "^3.0.2",
     "@types/react-slick": "^0.23.10"
   }
 }

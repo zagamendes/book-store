@@ -24,6 +24,7 @@ import AuthProvider from "./contextos/AuthContext";
 import Cart from "./screens/Cart";
 import SideBarAdmin from "./components/SideBarAdmin/SideBarAdmin";
 import FormularioCadastroProduto from "./screens/FormularioCadastroProduto";
+import FormularioCadastroSKU from "./screens/FormularioCadastroSKU";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -38,6 +39,7 @@ root.render(
               <Route path="produto" element={<FormularioCadastroProduto />}>
                 <Route path=":id" element={<FormularioCadastroProduto />} />
               </Route>
+              <Route path="sku/:id" element={<FormularioCadastroSKU />} />
             </Route>
           </Routes>
           {/* <Header />

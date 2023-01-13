@@ -1,4 +1,13 @@
-import { doc, setDoc } from "firebase/firestore";
+import {
+  arrayUnion,
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import {
   getDownloadURL,
   getStorage,
@@ -18,23 +27,31 @@ const FormularioCadastroSKU: React.FC = () => {
   const { id } = useParams();
   const [fotosPath, setFotosPath] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  useEffect(() => {
-    console.log(fotosPath);
-  }, [fotosPath]);
+  const btn = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {}, []);
 
   const handleSKU = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
-    const data: SKU = {
-      codigo: form.get("codigo") as string,
-      cor: form.get("cor") as string,
-      fotos: fotosPath,
-      tamanhoG: parseInt(form.get("tamanhoG") as string),
-      tamanhoGG: parseInt(form.get("tamanhoGG") as string),
-      tamanhoM: parseInt(form.get("tamanhoM") as string),
-      tamanhoP: parseInt(form.get("tamanhoP") as string),
-    };
-    await setDoc(doc(db, `produtos/${id}/skus/${data.cor}`), data);
+    if (btn.current) {
+      btn.current.disabled = true;
+      btn.current.innerHTML =
+        "<i class'fas spinner-border spinner-sm' /> Salvando SKU";
+      const data: SKU = {
+        codigo: form.get("codigo") as string,
+        cor: form.get("cor") as string,
+        fotos: fotosPath,
+        tamanhoG: parseInt(form.get("tamanhoG") as string),
+        tamanhoGG: parseInt(form.get("tamanhoGG") as string),
+        tamanhoM: parseInt(form.get("tamanhoM") as string),
+        tamanhoP: parseInt(form.get("tamanhoP") as string),
+      };
+      await updateDoc(doc(db, `produtos/${id}`), { skus: arrayUnion(data) });
+      setFotosPath([]);
+      btn.current.innerHTML = "<i className='fas fa-plus' /> Salvar SKU";
+      btn.current.disabled = false;
+    }
   };
   const handlePhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = e;
@@ -169,6 +186,7 @@ const FormularioCadastroSKU: React.FC = () => {
             <div className="row mt-3">
               <div className="col-sm-12">
                 <button
+                  ref={btn}
                   className="btn btn-primary bg-purple font-weight-bolder w-100"
                   disabled={fotosPath.length == 0 ? true : false}
                 >

@@ -562,3 +562,48 @@ For CI servers and headless environments, generate a new token with firebase log
 
 Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
  
+[debug] [2023-01-13T00:14:01.009Z] ----------------------------------------------------------------------
+[debug] [2023-01-13T00:14:01.011Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\AVANTI\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --import db
+[debug] [2023-01-13T00:14:01.012Z] CLI Version:   11.20.0
+[debug] [2023-01-13T00:14:01.012Z] Platform:      win32
+[debug] [2023-01-13T00:14:01.012Z] Node Version:  v18.12.1
+[debug] [2023-01-13T00:14:01.013Z] Time:          Thu Jan 12 2023 21:14:01 GMT-0300 (Horário Padrão de Brasília)
+[debug] [2023-01-13T00:14:01.013Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-01-13T00:14:01.184Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-01-13T00:14:01.184Z] > authorizing via signed-in user (izaacmendes2@gmail.com)
+[debug] [2023-01-13T00:14:01.474Z] java version "19.0.1" 2022-10-18
+
+[debug] [2023-01-13T00:14:01.475Z] Java(TM) SE Runtime Environment (build 19.0.1+10-21)
+Java HotSpot(TM) 64-Bit Server VM (build 19.0.1+10-21, mixed mode, sharing)
+
+[debug] [2023-01-13T00:14:01.517Z] Parsed Java major version: 19
+[info] i  emulators: Starting emulators: auth, functions, firestore, hosting {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, functions, firestore, hosting"}}
+[debug] [2023-01-13T00:14:01.532Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-01-13T00:14:01.532Z] [auth] Authentication Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-01-13T00:14:01.532Z] [firestore] Firestore Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-01-13T00:14:01.532Z] [firestore.websocket] websocket server for firestore only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-01-13T00:14:01.532Z] [hosting] Hosting Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-01-13T00:14:01.532Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"hosting":[{"address":"127.0.0.1","family":"IPv4","port":5000}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2023-01-13T00:14:01.548Z] [hub] writing locator at C:\Users\AVANTI\AppData\Local\Temp\hub-bookstore-15b7a.json
+[debug] [2023-01-13T00:14:01.562Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-01-13T00:14:01.562Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-01-13T00:14:01.562Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"hosting":[{"address":"127.0.0.1","family":"IPv4","port":5000}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5001}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9299}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] !  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: database, pubsub, storage {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mdatabase, pubsub, storage\u001b[22m"}}
+[warn] !  Your requested "node" version "16" doesn't match your global version "18". Using node@18 from host. {"metadata":{"emulator":{"name":"functions"},"message":"Your requested \"node\" version \"16\" doesn't match your global version \"18\". Using node@18 from host."}}
+[debug] [2023-01-13T00:14:01.601Z] defaultcredentials: writing to file C:\Users\AVANTI\AppData\Roaming\firebase\izaacmendes2_gmail_com_application_default_credentials.json
+[debug] [2023-01-13T00:14:01.609Z] Setting GAC to C:\Users\AVANTI\AppData\Roaming\firebase\izaacmendes2_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\AVANTI\\AppData\\Roaming\\firebase\\izaacmendes2_gmail_com_application_default_credentials.json"}}
+[debug] [2023-01-13T00:14:01.611Z] > refreshing access token with scopes: []
+[debug] [2023-01-13T00:14:01.613Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2023-01-13T00:14:01.613Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-01-13T00:14:01.928Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2023-01-13T00:14:01.929Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-01-13T00:14:01.940Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/bookstore-15b7a/adminSdkConfig [none]
+[debug] [2023-01-13T00:14:02.466Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/bookstore-15b7a/adminSdkConfig 200
+[debug] [2023-01-13T00:14:02.467Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/bookstore-15b7a/adminSdkConfig {"projectId":"bookstore-15b7a","storageBucket":"bookstore-15b7a.appspot.com","locationId":"southamerica-east1"}
+[info] i  firestore: Importing data from C:\Users\AVANTI\Desktop\book-store\db\firestore_export\firestore_export.overall_export_metadata {"metadata":{"emulator":{"name":"firestore"},"message":"Importing data from C:\\Users\\AVANTI\\Desktop\\book-store\\db\\firestore_export\\firestore_export.overall_export_metadata"}}
+[debug] [2023-01-13T00:14:02.512Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2023-01-13T00:14:02.513Z] Ignoring unsupported arg: single_project_mode_error {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: single_project_mode_error"}}
+[debug] [2023-01-13T00:14:02.513Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","C:\\Users\\AVANTI\\.cache\\firebase\\emulators\\cloud-firestore-emulator-v1.15.1.jar","--host","127.0.0.1","--port",8080,"--websocket_port",9150,"--project_id","bookstore-15b7a","--seed_from_export","C:\\Users\\AVANTI\\Desktop\\book-store\\db\\firestore_export\\firestore_export.overall_export_metadata","--rules","C:\\Users\\AVANTI\\Desktop\\book-store\\firestore.rules","--single_project_mode",true,"--functions_emulator","127.0.0.1:5001"],"optionalArgs":["port","webchannel_port","host","rules","websocket_port","functions_emulator","seed_from_export","project_id","single_project_mode"],"joinArgs":false} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\AVANTI\\\\.cache\\\\firebase\\\\emulators\\\\cloud-firestore-emulator-v1.15.1.jar\",\"--host\",\"127.0.0.1\",\"--port\",8080,\"--websocket_port\",9150,\"--project_id\",\"bookstore-15b7a\",\"--seed_from_export\",\"C:\\\\Users\\\\AVANTI\\\\Desktop\\\\book-store\\\\db\\\\firestore_export\\\\firestore_export.overall_export_metadata\",\"--rules\",\"C:\\\\Users\\\\AVANTI\\\\Desktop\\\\book-store\\\\firestore.rules\",\"--single_project_mode\",true,\"--functions_emulator\",\"127.0.0.1:5001\"],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"websocket_port\",\"functions_emulator\",\"seed_from_export\",\"project_id\",\"single_project_mode\"],\"joinArgs\":false}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[info] +  firestore: Firestore Emulator UI websocket is running on 9150. {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator UI websocket is running on 9150."}}

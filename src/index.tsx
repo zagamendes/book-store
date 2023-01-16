@@ -25,6 +25,7 @@ import Cart from "./screens/Cart";
 import SideBarAdmin from "./components/SideBarAdmin/SideBarAdmin";
 import FormularioCadastroProduto from "./screens/FormularioCadastroProduto";
 import FormularioCadastroSKU from "./screens/FormularioCadastroSKU";
+import Produtos from "./screens/Produtos";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -39,7 +40,15 @@ root.render(
               <Route path="produto" element={<FormularioCadastroProduto />}>
                 <Route path=":id" element={<FormularioCadastroProduto />} />
               </Route>
-              <Route path="sku/:id" element={<FormularioCadastroSKU />} />
+              <Route path="produtos" element={<Produtos />}></Route>
+              <Route
+                path="sku/:idProduto"
+                element={<FormularioCadastroSKU />}
+              />
+              <Route
+                path="sku/:idProduto/:idSku"
+                element={<FormularioCadastroSKU />}
+              />
             </Route>
           </Routes>
           {/* <Header />

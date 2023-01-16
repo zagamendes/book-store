@@ -1,11 +1,11 @@
 import React from "react";
-import { Product, useMiniCart } from "../../contextos/MiniCartContext";
+import { ProductMiniCart, useMiniCart } from "../../contextos/MiniCartContext";
 import Step from "../Step/Step";
 import "./index.css";
 
 // import { Container } from './styles';
 interface cartItemProps {
-  product: Product;
+  product: ProductMiniCart;
   checkout?: boolean;
 }
 const CheckoutItem: React.FC<cartItemProps> = ({

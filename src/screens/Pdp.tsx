@@ -14,12 +14,13 @@ import app from "../utils/firebaseConfig";
 import Step from "../components/Step/Step";
 
 import "react-loading-skeleton/dist/skeleton.css";
-import { Product, useMiniCart } from "../contextos/MiniCartContext";
+import { ProductMiniCart, useMiniCart } from "../contextos/MiniCartContext";
 import PdpLoading from "../components/PdpLoading/PdpLoading";
 import { precoFormatado } from "../utils/formataPreco";
 import "../index.css";
 import axios from "axios";
 import { CorreiosResponse } from "../@types/correios";
+import { Product } from "../@types/product";
 
 const PDP: React.FC = () => {
   const { slug } = useParams();
@@ -32,17 +33,21 @@ const PDP: React.FC = () => {
   const sleep = (milliseconds: number) => {
     return new Promise((resolve) => setTimeout(resolve, milliseconds));
   };
-  const [produto, setProduto] = useState<DocumentData>({} as DocumentData);
+  const [produto, setProduto] = useState<Product>({} as Product);
   const db = getFirestore(app);
-  const q = query(collection(db, "livros"), where("slug", "==", slug));
+  const q = query(collection(db, "produtos"), where("slug", "==", slug));
   const getProduct = async () => {
-    const data = await getDocs(q);
+    const dataSnapshot = await getDocs(q);
 
-    data.forEach((snapshot) => {
-      setProduto({ id: snapshot.id, ...snapshot.data() });
+    const product = dataSnapshot.docs.map((product) => {
+      return {
+        id: product.id,
+        ...product.data(),
+      };
     });
+    setProduto(product[0] as Product);
   };
-
+  const getSkus = () => {};
   useEffect(() => {
     getProduct();
     setQuantity(1);
@@ -73,7 +78,7 @@ const PDP: React.FC = () => {
           <div className="row">
             <div className="d-flex justify-content-center col-sm-12 col-lg-6">
               <img
-                src={produto.foto}
+                src={"produto.foto"}
                 className="img-fluid"
                 style={{ maxHeight: "500px" }}
                 alt={produto.nome}
@@ -102,7 +107,15 @@ const PDP: React.FC = () => {
                 <p className="m-0">{produto.descricao}</p>
               </div>
               <div className="d-flex pdp-ctn-step-add-to-cart align-items-start">
-                <Step product={produto as Product} />
+                <Step
+                  product={{
+                    foto: "",
+                    id: produto.id,
+                    nome: produto.nome,
+                    preco: produto.preco,
+                    quantidade: quantity,
+                  }}
+                />
               </div>
               <div>
                 <form
@@ -152,10 +165,10 @@ const PDP: React.FC = () => {
                 <button
                   onClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
                     addToCart({
-                      id: produto.id,
+                      id: produto.id as string,
                       nome: produto.nome,
                       preco: produto.preco,
-                      foto: produto.foto,
+                      foto: "",
                       quantidade: quantity,
                     });
                     const btn = e.currentTarget;

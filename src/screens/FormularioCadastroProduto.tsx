@@ -1,49 +1,91 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 
 import { ToastContainer, toast } from "react-toastify";
 
 import { db, storage } from "../utils/firebaseConfig";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { Product } from "../@types/product";
-import Categoria from "./Categoria";
+
+import { useNavigate, useParams } from "react-router-dom";
 import { SKU } from "../@types/sku";
-import { useNavigate } from "react-router-dom";
+import slugify from "slugify";
 
 function FormularioCadastroProduto() {
   const [showModal, setShowModal] = useState(false);
-  const Navigate = useNavigate();
-  const btn = useRef<HTMLButtonElement>(null);
-
   const [idProduto, setIdProduto] = useState("");
+  const [produto, setProduto] = useState({} as Product);
+  const [skus, setSkus] = useState<SKU[]>([]);
+  const navigate = useNavigate();
+  const btn = useRef<HTMLButtonElement>(null);
+  const { id } = useParams();
+  const getProduct = async () => {
+    const snapshot = await await getDoc(doc(db, `produtos/${id}`));
+    setProduto({ id: snapshot.id, ...(snapshot.data() as Product) });
+    await getSkus();
+  };
+  const getSkus = async () => {
+    const snapshot = await getDocs(
+      query(collection(db, `produtos/${id}/skus`))
+    );
+    if (!snapshot.empty) {
+      const skusdb = snapshot.docs.map(
+        (sku) =>
+          ({
+            id: sku.id,
+            ...sku.data(),
+          } as unknown)
+      );
+      setSkus(skusdb as SKU[]);
+    }
+  };
+  useEffect(() => {
+    if (id) {
+      getProduct();
+    }
+  }, []);
 
   const handleProduct = async (e: any) => {
     try {
       e.preventDefault();
-      const form = new FormData(e.target);
-      const data: Product = {
-        nome: form.get("nome") as string,
-        categorias: (form.get("categorias") as string)?.split(","),
-        descricao: form.get("descricao") as string,
-        peso: parseFloat(form.get("peso") as string),
-        preco: parseFloat(form.get("preco") as string),
-        termosParaBusca: (form.get("termosParaBusca") as string)?.split(","),
-      };
+      if (id && btn.current) {
+        btn.current.disabled = true;
+        btn.current.innerHTML =
+          "<span class='spinner-border spinner-border-sm'></span> Atualizando produto";
+        setProduto({
+          ...produto,
+          slug: slugify(produto.nome, { locale: "pt-br" }),
+        });
+        await updateDoc(doc(db, `produtos/${id}`), { ...produto });
+        btn.current.innerHTML =
+          "<span class='fas fa-plus'></span> Atualizar produto";
+        btn.current.disabled = false;
+        return;
+      }
+
       if (btn.current) {
         btn.current.disabled = true;
         btn.current.innerHTML =
           "<span class='spinner-border spinner-border-sm'></span> Cadastrando produto";
+
         const idProduto = await (
-          await addDoc(collection(db, "produtos"), data)
+          await addDoc(collection(db, "produtos"), {
+            ...produto,
+            slug: slugify(produto.nome, { locale: "pt-br" }),
+          })
         ).id;
         setIdProduto(idProduto);
 
-        const arrayPromises = data.categorias.map((categoria) => {
-          setDoc(doc(db, `${categoria}/${idProduto}`), data);
-        });
-
-        await Promise.all(arrayPromises);
         btn.current.innerHTML =
           "<span class='fas fa-plus'></span> Adicionar produto";
         btn.current.disabled = false;
@@ -70,7 +112,7 @@ function FormularioCadastroProduto() {
             variant="primary"
             onClick={() => {
               setShowModal(false);
-              Navigate(`/admin/sku/${idProduto}`);
+              navigate(`/admin/sku/${idProduto}`);
             }}
           >
             Sim
@@ -99,6 +141,10 @@ function FormularioCadastroProduto() {
                     name="nome"
                     id="nome"
                     data-campo-produto={true}
+                    value={produto.nome}
+                    onChange={({ target }) =>
+                      setProduto({ ...produto, nome: target.value })
+                    }
                   />
                 </div>
               </div>
@@ -116,6 +162,13 @@ function FormularioCadastroProduto() {
                     name="termosParaBusca"
                     id="termos"
                     data-campo-produto={true}
+                    value={produto.termosParaBusca?.join(",")}
+                    onChange={({ target }) =>
+                      setProduto({
+                        ...produto,
+                        termosParaBusca: target.value.split(","),
+                      })
+                    }
                   />
                 </div>
               </div>
@@ -130,6 +183,15 @@ function FormularioCadastroProduto() {
                     name="preco"
                     placeholder="Ex: 22.50"
                     className="form-control"
+                    value={produto.preco}
+                    onChange={({ target }) =>
+                      setProduto({
+                        ...produto,
+                        preco: parseFloat(
+                          target.value == "" ? "0" : target.value
+                        ),
+                      })
+                    }
                   />
                 </div>
               </div>
@@ -145,6 +207,10 @@ function FormularioCadastroProduto() {
                     data-campo-produto={true}
                     placeholder={"Ex: feminino,praia"}
                     name={"categorias"}
+                    value={produto.categoria}
+                    onChange={({ target }) =>
+                      setProduto({ ...produto, categoria: target.value })
+                    }
                   />
                 </div>
               </div>
@@ -157,6 +223,15 @@ function FormularioCadastroProduto() {
                     placeholder="Ex: 1.5"
                     className="form-control"
                     name="peso"
+                    value={produto.peso}
+                    onChange={({ target }) =>
+                      setProduto({
+                        ...produto,
+                        peso: parseFloat(
+                          target.value == "" ? "0" : target.value
+                        ),
+                      })
+                    }
                   />
                 </div>
               </div>
@@ -171,6 +246,10 @@ function FormularioCadastroProduto() {
                     data-campo-produto={true}
                     rows={4}
                     name="descricao"
+                    value={produto.descricao}
+                    onChange={({ target }) =>
+                      setProduto({ ...produto, descricao: target.value })
+                    }
                   ></textarea>
                 </div>
               </div>
@@ -183,12 +262,81 @@ function FormularioCadastroProduto() {
                     ref={btn}
                     style={{ background: "var(--my-purple)" }}
                   >
-                    <i className="fas fa-plus" /> Adicionar produto
+                    <i className="fas fa-plus" />{" "}
+                    {!id ? "Adicionar produto" : "Atualizar produto"}
                   </button>
+                  {id && (
+                    <button
+                      className="btn btn-success w-100 font-weight-bolder"
+                      type="submit"
+                      ref={btn}
+                      style={{ background: "var(--my-purple)" }}
+                    >
+                      <i className="fas fa-plus" /> Adicionar novo sku{" "}
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
           </form>
+        </div>
+      </div>
+      <div
+        className="card mx-auto mt-4"
+        style={{ maxWidth: "800px", minWidth: "800px" }}
+      >
+        <div className="card-header">SKUs</div>
+        <div className="card-body">
+          <table className="table">
+            <tr>
+              <th>Nome</th>
+              <th>Tamanho P</th>
+              <th>Tamanho M</th>
+              <th>Tamanho G</th>
+              <th>Tamanho GG</th>
+              <th>Alterar</th>
+              <th>Excluir</th>
+            </tr>
+            {skus.map((sku) => (
+              <tr>
+                <td>{sku.cor}</td>
+                <td>
+                  {sku.tamanhoP == 1
+                    ? `${sku.tamanhoP} unidade`
+                    : `${sku.tamanhoP} unidades`}
+                </td>
+                <td>
+                  {sku.tamanhoM == 1
+                    ? `${sku.tamanhoM} unidade`
+                    : `${sku.tamanhoM} unidades`}
+                </td>
+                <td>
+                  {sku.tamanhoG == 1
+                    ? `${sku.tamanhoG} unidade`
+                    : `${sku.tamanhoG} unidades`}
+                </td>
+                <td>
+                  {sku.tamanhoGG == 1
+                    ? `${sku.tamanhoGG} unidade`
+                    : `${sku.tamanhoGG} unidades`}
+                </td>
+
+                <td>
+                  <button
+                    className="btn btn-outline-primary"
+                    onClick={() => {
+                      navigate(`/admin/sku/${produto.id}/${sku.id}`);
+                    }}
+                  >
+                    Editar
+                  </button>
+                </td>
+                <td>
+                  <button className="btn btn-outline-danger">Excluir</button>
+                </td>
+              </tr>
+            ))}
+          </table>
         </div>
       </div>
     </div>

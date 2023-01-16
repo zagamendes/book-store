@@ -1,9 +1,9 @@
 import React, { useRef } from "react";
 
-import { Product, useMiniCart } from "../../contextos/MiniCartContext";
+import { ProductMiniCart, useMiniCart } from "../../contextos/MiniCartContext";
 import "./index.css";
 interface stepProps {
-  product?: Product;
+  product?: ProductMiniCart;
 }
 const Step: React.FC<stepProps> = ({ product }) => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -26,7 +26,7 @@ const Step: React.FC<stepProps> = ({ product }) => {
             ) {
               inputRef.current?.stepDown();
 
-              descreaseQuantity(product as Product);
+              descreaseQuantity(product as ProductMiniCart);
             } else {
               inputRef.current?.stepDown();
               setQuantity(parseInt(inputRef.current?.value as string));
@@ -62,7 +62,7 @@ const Step: React.FC<stepProps> = ({ product }) => {
             ) {
               inputRef.current?.stepUp();
 
-              addToCart(product as Product);
+              addToCart(product as ProductMiniCart);
             } else {
               inputRef.current?.stepUp();
               setQuantity(parseInt(inputRef.current?.value as string));

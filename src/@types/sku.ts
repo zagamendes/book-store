@@ -6,4 +6,5 @@ export interface SKU {
   tamanhoG: number;
   tamanhoGG: number;
   fotos: string[];
+  id?: string;
 }

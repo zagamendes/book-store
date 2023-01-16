@@ -1,9 +1,12 @@
 import {
+  addDoc,
   arrayUnion,
   collection,
   doc,
+  getDoc,
   getDocs,
   query,
+  runTransaction,
   setDoc,
   updateDoc,
   where,
@@ -17,6 +20,7 @@ import {
 } from "firebase/storage";
 import React, { useEffect, useRef, useState } from "react";
 import { ProgressBar } from "react-bootstrap";
+import { Prev } from "react-bootstrap/esm/PageItem";
 import { useParams } from "react-router-dom";
 import { SKU } from "../@types/sku";
 import { db, storage } from "../utils/firebaseConfig";
@@ -24,30 +28,56 @@ import { db, storage } from "../utils/firebaseConfig";
 
 const FormularioCadastroSKU: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { id } = useParams();
+  const { idProduto, idSku } = useParams();
   const [fotosPath, setFotosPath] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const btn = useRef<HTMLButtonElement>(null);
+  const [currentSku, setCurrentSku] = useState({} as SKU);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (idSku) getSKUInfo();
+  }, []);
+
+  const getSKUInfo = async () => {
+    const dataSnapshot = await getDoc(
+      doc(db, `produtos/${idProduto}/skus/${idSku}`)
+    );
+    setCurrentSku({ ...(dataSnapshot.data() as SKU) });
+  };
 
   const handleSKU = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = new FormData(e.currentTarget);
+    if (idSku) {
+      try {
+        await runTransaction(db, async (transaction) => {
+          const produtoRef = doc(db, `produtos/${idProduto}/skus/${idSku}`);
+          const sku = await transaction.get(produtoRef);
+          if (!sku.exists()) {
+            throw "Document does not exist!";
+          }
+
+          transaction.update(produtoRef, {
+            ...currentSku,
+          });
+        });
+        console.log("Transaction successfully committed!");
+        setFotosPath([]);
+      } catch (e: any) {
+        console.log("Transaction failed: ", e);
+        alert(e.message);
+      }
+      return;
+    }
+
     if (btn.current) {
       btn.current.disabled = true;
       btn.current.innerHTML =
         "<i class'fas spinner-border spinner-sm' /> Salvando SKU";
-      const data: SKU = {
-        codigo: form.get("codigo") as string,
-        cor: form.get("cor") as string,
-        fotos: fotosPath,
-        tamanhoG: parseInt(form.get("tamanhoG") as string),
-        tamanhoGG: parseInt(form.get("tamanhoGG") as string),
-        tamanhoM: parseInt(form.get("tamanhoM") as string),
-        tamanhoP: parseInt(form.get("tamanhoP") as string),
-      };
-      await updateDoc(doc(db, `produtos/${id}`), { skus: arrayUnion(data) });
+
+      await addDoc(collection(db, `produtos/${idProduto}/skus`), {
+        ...currentSku,
+      });
+
       setFotosPath([]);
       btn.current.innerHTML = "<i className='fas fa-plus' /> Salvar SKU";
       btn.current.disabled = false;
@@ -58,15 +88,22 @@ const FormularioCadastroSKU: React.FC = () => {
     const fotos = target.files;
     setIsLoading(true);
     const arrayPromises = Array.from(fotos as FileList).map((foto) => {
-      return uploadBytes(ref(storage, `fotos/${id}/${Date.now()}`), foto);
+      return uploadBytes(
+        ref(storage, `fotos/${idProduto}/${Date.now()}`),
+        foto
+      );
     });
     const storagePath = await Promise.all(arrayPromises);
-    storagePath.forEach(async (path) => {
-      const url = await getDownloadURL(path.ref);
-
-      setFotosPath((prev) => [...prev, url]);
+    const arrayURLPromises = storagePath.map((path, i) => {
+      return getDownloadURL(path.ref);
     });
+    const arrayURLs = await Promise.all(arrayURLPromises);
+    setCurrentSku((prev) => {
+      return { ...prev, fotos: [...(prev.fotos ?? []), ...arrayURLs] };
+    });
+
     setIsLoading(false);
+    setFotosPath([]);
   };
 
   return (
@@ -83,9 +120,14 @@ const FormularioCadastroSKU: React.FC = () => {
                   <label>Cor</label>
                   <input
                     type={"text"}
+                    required
                     className="form-control"
                     placeholder="Ex: Azul"
                     name="cor"
+                    onChange={({ target }) =>
+                      setCurrentSku({ ...currentSku, cor: target.value })
+                    }
+                    value={currentSku.cor}
                   />
                 </div>
               </div>
@@ -97,6 +139,11 @@ const FormularioCadastroSKU: React.FC = () => {
                     className="form-control"
                     placeholder="Ex: CBA significa camisa básica azul pequena"
                     name="codigo"
+                    required
+                    onChange={({ target }) =>
+                      setCurrentSku({ ...currentSku, codigo: target.value })
+                    }
+                    value={currentSku.codigo}
                   />
                 </div>
               </div>
@@ -109,7 +156,15 @@ const FormularioCadastroSKU: React.FC = () => {
                     className="form-control"
                     type="tel"
                     name="tamanhoP"
-                    defaultValue={0}
+                    onChange={({ target }) =>
+                      setCurrentSku({
+                        ...currentSku,
+                        tamanhoP: parseInt(
+                          target.value == "" ? "0" : target.value
+                        ),
+                      })
+                    }
+                    value={currentSku.tamanhoP ?? 0}
                   />
                 </div>
               </div>
@@ -123,6 +178,15 @@ const FormularioCadastroSKU: React.FC = () => {
                     name="tamanhoM"
                     placeholder="Ex: 15"
                     defaultValue={0}
+                    onChange={({ target }) =>
+                      setCurrentSku({
+                        ...currentSku,
+                        tamanhoM: parseInt(
+                          target.value == "" ? "0" : target.value
+                        ),
+                      })
+                    }
+                    value={currentSku.tamanhoM ?? 0}
                   />
                 </div>
               </div>
@@ -138,6 +202,15 @@ const FormularioCadastroSKU: React.FC = () => {
                     name="tamanhoG"
                     placeholder="Ex: 15"
                     defaultValue={0}
+                    onChange={({ target }) =>
+                      setCurrentSku({
+                        ...currentSku,
+                        tamanhoG: parseInt(
+                          target.value == "" ? "0" : target.value
+                        ),
+                      })
+                    }
+                    value={currentSku.tamanhoG ?? 0}
                   />
                 </div>
               </div>
@@ -151,6 +224,15 @@ const FormularioCadastroSKU: React.FC = () => {
                     name="tamanhoGG"
                     placeholder="Ex: 15"
                     defaultValue={0}
+                    onChange={({ target }) =>
+                      setCurrentSku({
+                        ...currentSku,
+                        tamanhoGG: parseInt(
+                          target.value == "" ? "0" : target.value
+                        ),
+                      })
+                    }
+                    value={currentSku.tamanhoGG ?? 0}
                   />
                 </div>
               </div>
@@ -166,6 +248,7 @@ const FormularioCadastroSKU: React.FC = () => {
                   onChange={handlePhoto}
                 />
                 <button
+                  type="button"
                   className="btn btn-info bg-purple text-white font-weight-bolder  w-100"
                   onClick={() => {
                     inputRef.current?.click();
@@ -188,7 +271,6 @@ const FormularioCadastroSKU: React.FC = () => {
                 <button
                   ref={btn}
                   className="btn btn-primary bg-purple font-weight-bolder w-100"
-                  disabled={fotosPath.length == 0 ? true : false}
                 >
                   <i className="fas fa-plus" /> Salvar SKU
                 </button>

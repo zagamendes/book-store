@@ -34,8 +34,8 @@ const Categoria: React.FC = () => {
     <div>
       <h1 className="text-center">Resultados do gênero {categoria}</h1>
       <div className="d-flex justify-content-around">
-        {livros.map((livro) => {
-          return <Shelf book={livro} />;
+        {livros.map((livro: any) => {
+          return <Shelf {...livro} />;
         })}
       </div>
     </div>

@@ -1,18 +1,18 @@
 import React, { createContext, useContext, useState } from "react";
 
 interface miniCartContextProps {
-  products: Product[];
-  addToCart: (produt: Product) => void;
-  descreaseQuantity: (product: Product) => void;
+  products: ProductMiniCart[];
+  addToCart: (produt: ProductMiniCart) => void;
+  descreaseQuantity: (product: ProductMiniCart) => void;
   quantity: number;
   setQuantity: (quantity: number) => void;
   isMiniCartOpen: boolean;
   setIsMiniCartOpen: (_: boolean) => void;
   removeProduct: (id: string) => void;
-  getProducts: () => Product[];
+  getProducts: () => ProductMiniCart[];
   cleanCart: () => void;
 }
-export interface Product {
+export interface ProductMiniCart {
   id: string;
   nome: string;
   preco: number;
@@ -22,7 +22,7 @@ export interface Product {
 const miniCartContext = createContext({} as miniCartContextProps);
 export const useMiniCart = () => useContext(miniCartContext);
 const MiniCartProvider: React.FC<any> = ({ children }) => {
-  const addToCart = (product: Product) => {
+  const addToCart = (product: ProductMiniCart) => {
     setProducts((prevProducts) => {
       if (prevProducts.find((item) => item.id == product.id) == null) {
         localStorage.setItem(
@@ -52,7 +52,7 @@ const MiniCartProvider: React.FC<any> = ({ children }) => {
     });
   };
 
-  const descreaseQuantity = (product: Product) => {
+  const descreaseQuantity = (product: ProductMiniCart) => {
     setProducts((prevProducts) => {
       return prevProducts.map((item) => {
         if (item.id == product.id && product.quantidade > 1) {
@@ -82,7 +82,7 @@ const MiniCartProvider: React.FC<any> = ({ children }) => {
 
     return JSON.parse(products);
   };
-  const [products, setProducts] = useState<Product[]>(getProducts());
+  const [products, setProducts] = useState<ProductMiniCart[]>(getProducts());
   const [quantity, setQuantity] = useState<number>(1);
   const [isMiniCartOpen, setIsMiniCartOpen] = useState(false);
 

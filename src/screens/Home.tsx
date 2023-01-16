@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   getFirestore,
   collection,
@@ -50,20 +50,21 @@ const Home: React.FC = () => {
     ],
   };
   const getBooks = async () => {
-    const data = await getDocs(collection(db, "livros"));
-    let arrayDocumentos: any = [];
-    data.forEach((snapshot) => {
-      arrayDocumentos.push({ id: snapshot.id, ...snapshot.data() });
-    });
-    setBooks(arrayDocumentos);
+    const dataSnapshot = await getDocs(collection(db, "produtos"));
+    setBooks(
+      dataSnapshot.docs.map((camisa) => ({
+        id: camisa.id,
+        ...camisa.data(),
+      }))
+    );
   };
-  useEffect(() => {
+  useLayoutEffect(() => {
     getBooks();
-    axios(
+    /* axios(
       "https://sandbox.melhorenvio.com.br/oauth/authorize?client_id=3540&redirect_uri=https://bookstore-15b7a.web.app/&response_type=code&scope=cart-read"
     ).then((response) => {
       console.log(response);
-    });
+    }); */
   }, []);
 
   return (
@@ -123,7 +124,7 @@ const Home: React.FC = () => {
           ) : (
             <Slider {...settings}>
               {books.map((book: any) => {
-                return <Shelf book={book} />;
+                return <Shelf {...book} />;
               })}
             </Slider>
           )}

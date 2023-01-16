@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 // import { Container } from './styles';
 
@@ -21,7 +21,9 @@ const SideBarAdmin: React.FC = () => {
             <i className="fas fa-clone" /> Categorias
           </li>
           <li className="mb-3">
-            <i className="fas fa-warehouse	" /> Produtos
+            <Link to="produtos">
+              <i className="fas fa-warehouse	" /> Produtos
+            </Link>
           </li>
           <li className="mb-3">
             <i className="	fas fa-wrench" /> Configurações da loja

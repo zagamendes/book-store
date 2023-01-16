@@ -1,10 +1,10 @@
 import React from "react";
-import { Product, useMiniCart } from "../../contextos/MiniCartContext";
+import { ProductMiniCart, useMiniCart } from "../../contextos/MiniCartContext";
 import Step from "../Step/Step";
 
 // import { Container } from './styles';
 interface cartItemProps {
-  product: Product;
+  product: ProductMiniCart;
 }
 const CartItem: React.FC<cartItemProps> = ({ product }) => {
   const { removeProduct } = useMiniCart();

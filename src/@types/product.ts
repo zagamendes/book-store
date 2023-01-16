@@ -2,7 +2,9 @@ export interface Product {
   nome: string;
   termosParaBusca: string[];
   descricao: string;
-  categorias: string[];
+  categoria: string;
   preco: number;
   peso: number;
+  id?: string;
+  slug?: string;
 }
